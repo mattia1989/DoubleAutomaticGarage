@@ -118,30 +118,44 @@ void AutomaticGarage::setAutomaticGarage(const int pPinUp, const int pPinDown,
 
 void AutomaticGarage::init()
 {
-	// Initialize all reles' pins
-	pinMode(this->_pinUp, OUTPUT);
-	pinMode(this->_pinDown, OUTPUT);
-
-	// Initialize all sensors' pins
-	pinMode(this->_pinSensorUp, INPUT);
-	pinMode(this->_pinSensorDown, INPUT);
+	// Initialize all pins
+	this->initRele();
+	this->initSensor();
 
 	// Complete initialization of timer
 	this->_timerObjectPtr->setSingleShot(AutomaticGarage::IS_SINGLE_SHOT);
 	this->_timerObjectPtr->setOnTimer((CallBackType) (&AutomaticGarage::onTimeExpiriedCallback));
-	&AutomaticGarage::onTimeExpiriedCallback = reinterpret_cast <void (AutomaticGarage::*)()>
-		(&AutomaticGarage::onTimeExpiriedCallback);
 
-	//Serial.println(&AutomaticGarage::onTimeExpiriedCallback);
+
+	/////////////////////////////////////////////////////////////////////
+
+	CallBackType mTest = (CallBackType) &AutomaticGarage::onTimeExpiriedCallback;
+	this->_timerObjectPtr->setOnTimer(mTest);
+
+	/////////////////////////////////////////////////////////////////////
+
 
 	this->_timerObjectPtr->Start();  // TODO Is Right here? I don't think
+}
+
+void AutomaticGarage::initRele()
+{
+	// Initialize all reles' pins
+	pinMode(this->_pinUp, OUTPUT);
+	pinMode(this->_pinDown, OUTPUT);
+}
+
+void AutomaticGarage::initSensor()
+{
+	// Initialize all sensors' pins
+	pinMode(this->_pinSensorUp, INPUT);
+	pinMode(this->_pinSensorDown, INPUT);
 }
 
 void AutomaticGarage::sendValue(unsigned long pCode, Status_garage pDirectionSensor)
 {
 	this->_timerObjectPtr->Update();
 	delay(100);
-	//this->testSequence(1000);
 	Serial.print("Current timer -> ");
 	Serial.println(this->_timerObjectPtr->getCurrentTime());
 }
@@ -161,4 +175,3 @@ void AutomaticGarage::onTimeExpiriedCallback()
 
 	ArduinoUtility::getInstance()->println("onTimeExpiriedCallback -> END");
 }
-

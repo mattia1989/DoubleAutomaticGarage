@@ -88,8 +88,8 @@
   <ItemGroup>
     <ClInclude Include="ArduinoUtility.h" />
     <ClInclude Include="AutomaticGarage.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="TimerObject.h" />
-    <ClInclude Include="TODO_list.h" />
     <ClInclude Include="SketchConstants.h" />
     <ClInclude Include="__vm\.DoubleAutoGarage.vsarduino.h" />
   </ItemGroup>
@@ -97,6 +97,9 @@
     <ClCompile Include="ArduinoUtility.cpp" />
     <ClCompile Include="AutomaticGarage.cpp" />
     <ClCompile Include="TimerObject.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="DoubleAutoGarage.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

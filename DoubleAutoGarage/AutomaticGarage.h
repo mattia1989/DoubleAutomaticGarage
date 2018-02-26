@@ -12,7 +12,6 @@
 class AutomaticGarage
 {
 private:
-
 	// Sensor
 	const int SENSOR_DIRECTION_UP = 1;
 	const int SENSOR_DIRECTION_DOWN = -1;
@@ -54,8 +53,8 @@ private:
 
 public:
 	AutomaticGarage(const int pPinUp, const int pPinDown, const int pPinSensorUp,
-		const int pPinSensorDown, const unsigned long pCodeUp, const unsigned long pCodeDown,
-		const unsigned long int pDuration);
+		const int pPinSensorDown, const unsigned long pCodeUp, const unsigned long
+		pCodeDown, const unsigned long int pDuration);
 	~AutomaticGarage();
 
 	void setPinUp(const int pPinUp);
@@ -71,6 +70,8 @@ public:
 		const unsigned long int pDuration);
 	
 	void init();
+	void initRele();
+	void initSensor();
 	void testSequence(const int pDelayTime);
 
 	void sendValue(unsigned long pCode, Status_garage pDirectionSensor);

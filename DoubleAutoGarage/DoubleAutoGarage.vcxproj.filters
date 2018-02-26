@@ -27,13 +27,13 @@
     <ClInclude Include="AutomaticGarage.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TODO_list.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ArduinoUtility.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TimerObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -47,5 +47,10 @@
     <ClCompile Include="TimerObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="DoubleAutoGarage.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

@@ -37,6 +37,38 @@ Actual staus of work:
 		   don't work correctly: if I call the same function called inside the callback out of 
 		   them, it work but not from inside --> try to fix it with operator "reinterpret_cast"
 
+DAY 3
+
+Actual staus of work:
+
+	- hardware:
+		-- no progress --> see above
+
+	- software:
+		-- installed Git and executed push on DoubleAutomaticGarage Github's repository
+		-- impossible to use the operator "reinterpret_cast" inside the class' methods --> try 
+		   a different way 
+
+DAY 
+
+Actual staus of work:
+
+	- hardware:
+		-- 
+
+	- software:
+		-- 
+
+DAY 
+
+Actual staus of work:
+
+	- hardware:
+		-- 
+
+	- software:
+		-- 
+
 DAY 
 
 Actual staus of work:
