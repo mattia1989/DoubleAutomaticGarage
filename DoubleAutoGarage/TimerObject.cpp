@@ -1,20 +1,21 @@
 #include "TimerObject.h"
+#include "AutomaticGarage.h"
 
 TimerObject::TimerObject(unsigned long int ms) {
 	Create(ms, NULL, false);
 }
 
-TimerObject::TimerObject(unsigned long int ms, AutomaticGarage:: * callback) {
+TimerObject::TimerObject(unsigned long int ms, AutomaticGarage * callback) {
 	Create(ms, callback, false);
 }
 
-TimerObject::TimerObject(unsigned long int ms, AutomaticGarage:: * callback, bool isSingle) {
+TimerObject::TimerObject(unsigned long int ms, AutomaticGarage * callback, bool isSingle) {
 	Create(ms, callback, isSingle);
 }
 
 /* PRIVATE METHODS */
 
-void TimerObject::Create(unsigned long int ms, AutomaticGarage:: * callback, bool isSingle) {
+void TimerObject::Create(unsigned long int ms, AutomaticGarage * callback, bool isSingle) {
 	setInterval(ms);
 	setEnabled(false);
 	setSingleShot(isSingle);
@@ -50,7 +51,7 @@ void TimerObject::setSingleShot(bool isSingle) {
 	blSingleShot = isSingle;
 }
 
-void TimerObject::setOnTimer(AutomaticGarage:: * callback) {
+void TimerObject::setOnTimer(AutomaticGarage * callback) {
 	onRun = callback;
 }
 
@@ -76,8 +77,8 @@ void TimerObject::Pause() {
 }
 
 void TimerObject::Update() {
-	if (Tick())
-		onRun();
+//	if (Tick())
+//		onRun->;
 }
 
 unsigned long int TimerObject::getInterval() {
@@ -87,7 +88,7 @@ unsigned long int TimerObject::getInterval() {
 unsigned long int TimerObject::getCurrentTime() {
 	return (unsigned long int)(millis() - LastTime);
 }
-AutomaticGarage:: * TimerObject::getOnTimerCallback() {
+AutomaticGarage * TimerObject::getOnTimerCallback() {
 	return onRun;
 }
 

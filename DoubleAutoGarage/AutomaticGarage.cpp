@@ -1,3 +1,4 @@
+#include "StatusGarage.h"
 #include "AutomaticGarage.h"
 
 /* PRIVATE SECTION */
@@ -96,9 +97,9 @@ void AutomaticGarage::setGarageDownCode(const unsigned long pCodeDown)
 	this->_garageDownCode = pCodeDown;
 }
 
-void AutomaticGarage::setStatus(const Status_garage)
+void AutomaticGarage::setStatus(const Status_garage status)
 {
-	this->_status = Status_garage::INITIAL;
+	this->_status = status;
 }
 
 void AutomaticGarage::setAutomaticGarage(const int pPinUp, const int pPinDown, 
@@ -111,7 +112,7 @@ void AutomaticGarage::setAutomaticGarage(const int pPinUp, const int pPinDown,
 	this->setPinSensorDown(pPinSensorDown);
 	this->setGarageUpCode(pCodeUp);
 	this->setGarageDownCode(pCodeDown);
-	this->setStatus(Status_garage::INITIAL);
+	this->setStatus(INITIAL);
 
 	this->_timerObjectPtr = new TimerObject(pDuration);
 }
@@ -128,7 +129,7 @@ void AutomaticGarage::init()
 
 	/////////////////////////////////////////////////////////////////////
 
-	this->_timerObjectPtr->setOnTimer(&AutomaticGarage::onTimeExpiriedCallback);
+	this->_timerObjectPtr->setOnTimer(this);
 
 	/////////////////////////////////////////////////////////////////////
 
@@ -150,7 +151,7 @@ void AutomaticGarage::initSensor()
 	pinMode(this->_pinSensorDown, INPUT);
 }
 
-void AutomaticGarage::sendValue(unsigned long pCode, Status_garage pDirectionSensor)
+void AutomaticGarage::sendValue(unsigned long pCode, unsigned long pDirectionSensor)
 {
 	// Update timer
 	this->_timerObjectPtr->Update();

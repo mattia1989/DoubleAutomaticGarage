@@ -5,7 +5,7 @@
 */
 
 #include <Arduino.h>
-#include "rc-switch\RCSwitch.h"
+//#include "rc-switch\RCSwitch.h"
 
 #include "SketchConstants.h"
 #include "ArduinoUtility.h"
@@ -14,7 +14,7 @@
 // Global declaration
 const bool MAIN_DEBUG = false;
 
-RCSwitch* gRCSwitch = new RCSwitch();
+//RCSwitch* gRCSwitch = new RCSwitch();
 AutomaticGarage* gGarageOnePtr = new AutomaticGarage(PIN_RELE_UP_1, PIN_RELE_DOWN_1, PIN_SENSOR_UP_1, 
 	PIN_SENSOR_DOWN_2, CODE_UP_1, CODE_DOWN_1, HEIGHT_TIME_1);
 AutomaticGarage* gGarageTwoPtr = new AutomaticGarage(PIN_RELE_UP_2, PIN_RELE_DOWN_2, PIN_SENSOR_UP_2, 
@@ -29,7 +29,7 @@ void setup() {
 	ArduinoUtility::getInstance()->println("Setup -> START");
 
 	Serial.begin(9600);
-	gRCSwitch->enableReceive(0);
+//	gRCSwitch->enableReceive(0);
 
 	gGarageOnePtr->init();
 	gGarageTwoPtr->init();
@@ -46,9 +46,9 @@ void loop() {
 	// Get Value from Radio
 	gCode = 0;
 
-	if (gRCSwitch->available()) {
-		gCode = gRCSwitch->getReceivedValue();
-	}
+//	if (gRCSwitch->available()) {
+//		gCode = gRCSwitch->getReceivedValue();
+//	}
 
 	// Get sensor's value of first garage TODO
 	gDirection = 0;
