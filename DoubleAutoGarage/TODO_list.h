@@ -49,6 +49,17 @@ Actual staus of work:
 		-- impossible to use the operator "reinterpret_cast" inside the class' methods --> try 
 		   a different way 
 
+DAY 4.1
+
+Actual staus of work:
+
+	- hardware:
+		-- no progress --> see above
+
+	- software:
+		-- create brench on GitHub
+		-- try to inglobe the TimerObject class inside the AutomaticGarage clss without success
+
 DAY 
 
 Actual staus of work:
@@ -78,20 +89,5 @@ Actual staus of work:
 
 	- software:
 		-- 
-
-DAY 
-
-Actual staus of work:
-
-	- hardware:
-		-- 
-
-	- software:
-		-- 
-
-
-
-
-
 
 */

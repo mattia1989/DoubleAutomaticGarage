@@ -124,13 +124,11 @@ void AutomaticGarage::init()
 
 	// Complete initialization of timer
 	this->_timerObjectPtr->setSingleShot(AutomaticGarage::IS_SINGLE_SHOT);
-	this->_timerObjectPtr->setOnTimer((CallBackType) (&AutomaticGarage::onTimeExpiriedCallback));
 
 
 	/////////////////////////////////////////////////////////////////////
 
-	CallBackType mTest = (CallBackType) &AutomaticGarage::onTimeExpiriedCallback;
-	this->_timerObjectPtr->setOnTimer(mTest);
+	this->_timerObjectPtr->setOnTimer(&AutomaticGarage::onTimeExpiriedCallback);
 
 	/////////////////////////////////////////////////////////////////////
 
@@ -154,8 +152,8 @@ void AutomaticGarage::initSensor()
 
 void AutomaticGarage::sendValue(unsigned long pCode, Status_garage pDirectionSensor)
 {
+	// Update timer
 	this->_timerObjectPtr->Update();
-	delay(100);
 	Serial.print("Current timer -> ");
 	Serial.println(this->_timerObjectPtr->getCurrentTime());
 }
@@ -175,3 +173,4 @@ void AutomaticGarage::onTimeExpiriedCallback()
 
 	ArduinoUtility::getInstance()->println("onTimeExpiriedCallback -> END");
 }
+

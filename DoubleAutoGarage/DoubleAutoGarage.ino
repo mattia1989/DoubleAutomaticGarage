@@ -7,9 +7,9 @@
 #include <Arduino.h>
 #include "rc-switch\RCSwitch.h"
 
+#include "SketchConstants.h"
 #include "ArduinoUtility.h"
 #include "AutomaticGarage.h"
-#include "SketchConstants.h"
 
 // Global declaration
 const bool MAIN_DEBUG = false;

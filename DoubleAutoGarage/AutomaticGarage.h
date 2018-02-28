@@ -1,3 +1,4 @@
+#pragma once
 
 #ifndef __AUTOMATICGARAGE_H__
 #define __AUTOMATICGARAGE_H__
@@ -17,7 +18,7 @@ private:
 	const int SENSOR_DIRECTION_DOWN = -1;
 	const int SENSOR_DIRECTION_NONE = 0;
 
-	// Number of run of timer
+	// Tipe of run of TimerObject
 	const bool IS_SINGLE_SHOT = true;
 
 	// Command codes
