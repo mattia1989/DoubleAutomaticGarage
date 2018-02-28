@@ -7,6 +7,7 @@
 
 #include "ArduinoUtility.h"
 #include "TimerObject.h"
+#include "StatusGarage.h"
 
 #define MANUAL_DELAY 1000
 
@@ -25,18 +26,6 @@ private:
 	unsigned long _garageUpCode;
 	unsigned long _garageDownCode;
 
-	// Enumeration for Garage Status
-	enum Status_garage
-	{
-		INITIAL = 0,
-		UP = 1,
-		DOWN = -1,
-		PAUSE = 2,
-		MANUAL = -2,
-		FINISH = 3,
-		OVER_UP = -3,
-		OVER_DOWN = 4
-	};
 	Status_garage _status;
 
 	// Tracer of height
@@ -75,7 +64,7 @@ public:
 	void initSensor();
 	void testSequence(const int pDelayTime);
 
-	void sendValue(unsigned long pCode, Status_garage pDirectionSensor);
+	void sendValue(unsigned long pCode, unsigned long pDirectionSensor);
 	void sendValue(unsigned long pCode);
 
 	void onTimeExpiriedCallback();

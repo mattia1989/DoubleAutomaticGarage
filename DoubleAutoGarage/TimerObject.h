@@ -4,30 +4,32 @@
 #ifndef TIMER_OBJECT_H
 #define TIMER_OBJECT_H
 
-#include "AutomaticGarage::.h"
+#include "StatusGarage.h"
+
+class AutomaticGarage;
 
 class TimerObject {
 private:
 
-	void Create(unsigned long int ms, AutomaticGarage:: * callback, bool isSingle);
+	void Create(unsigned long int ms, AutomaticGarage * callback, bool isSingle);
 	unsigned long int msInterval;
 	bool blEnabled;
 	bool blSingleShot;
-	AutomaticGarage:: * onRun;
+	AutomaticGarage * onRun;
 	bool Tick();
 	unsigned long LastTime;
 	unsigned long DiffTime;//used when I pause the Timer and need to resume
 
 public:
 	TimerObject(unsigned long int ms);
-	TimerObject(unsigned long int ms, AutomaticGarage:: * callback);
-	TimerObject(unsigned long int ms, AutomaticGarage:: * callback, bool isSingle);
+	TimerObject(unsigned long int ms, AutomaticGarage * callback);
+	TimerObject(unsigned long int ms, AutomaticGarage * callback, bool isSingle);
 	~TimerObject();
 
 	void setInterval(unsigned long int ms);
 	void setEnabled(bool Enabled);
 	void setSingleShot(bool isSingle);
-	void setOnTimer(AutomaticGarage:: * callback);
+	void setOnTimer(AutomaticGarage * callback);
 	void Start();
 	void Resume();
 	void Pause();
@@ -36,7 +38,7 @@ public:
 	
 	unsigned long int getInterval();
 	unsigned long int getCurrentTime();
-	AutomaticGarage:: * getOnTimerCallback();
+	AutomaticGarage * getOnTimerCallback();
 
 	bool isEnabled();
 	bool isSingleShot();
