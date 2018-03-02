@@ -42,21 +42,23 @@ private:
 	void stop();
 
 public:
-	AutomaticGarage(const int pPinUp, const int pPinDown, const int pPinSensorUp,
-		const int pPinSensorDown, const unsigned long pCodeUp, const unsigned long
-		pCodeDown, const unsigned long int pDuration);
+	AutomaticGarage(const int pPinUp, const int pPinDown, 
+		const int pPinSensorUp, const int pPinSensorDown, 
+		const int pCodeUp, const int pCodeDown, 
+		const unsigned long int pDuration);
 	~AutomaticGarage();
 
 	void setPinUp(const int pPinUp);
 	void setPinDow(const int pPinDown);
 	void setPinSensorUp(const int pPinSensorUp);
 	void setPinSensorDown(const int pPinSensorDown);
-	void setGarageUpCode(const unsigned long pCodeUp);
-	void setGarageDownCode(const unsigned long pCodeDown);
+	void setGarageUpCode(const int pCodeUp);
+	void setGarageDownCode(const int pCodeDown);
 	void setStatus(const Status_garage);
 
-	void setAutomaticGarage(const int pPinUp, const int pPinDown, const int pPinSensorUp,
-		const int pPinSensorDown, const unsigned long pCodeUp, const unsigned long pCodeDown,
+	void setAutomaticGarage(const int pPinUp, const int pPinDown, 
+		const int pPinSensorUp, const int pPinSensorDown, 
+		const int pCodeUp, const int pCodeDown,
 		const unsigned long int pDuration);
 	
 	void init();

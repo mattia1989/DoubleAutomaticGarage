@@ -18,12 +18,12 @@
                      // receive is based on interrupt on this pin
 
 // RadioCommands' code
-const unsigned long CODE_UP_1 = 15524904; // TODO You must change this!!! DEFAULT !!!
-const unsigned long CODE_DOWN_1 = 123456789; // TODO You must change this!!! FAKE !!!
-const unsigned long CODE_UP_2 = 123456789; // TODO You must change this!!! FAKE !!!
-const unsigned long CODE_DOWN_2 = 123456789; // TODO You must change this!!! FAKE !!!
+const int CODE_UP_1 = 15524904; // TODO You must change this!!! DEFAULT !!!
+const int CODE_DOWN_1 = 123456789; // TODO You must change this!!! FAKE !!!
+const int CODE_UP_2 = 123456789; // TODO You must change this!!! FAKE !!!
+const int CODE_DOWN_2 = 123456789; // TODO You must change this!!! FAKE !!!
 
 // Max Height
-const unsigned long int  HEIGHT_TIME_1 = 2 * 1000; // TODO Thinging it! 
+const unsigned long int  HEIGHT_TIME_1 = 5 * 1000; // TODO Thinging it! 
 const unsigned long int  HEIGHT_TIME_2 = 5 * 1000; // TODO Thinging it!
 

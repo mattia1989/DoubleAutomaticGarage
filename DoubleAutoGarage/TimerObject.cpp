@@ -1,4 +1,3 @@
-#include "TimerObject.h"
 #include "AutomaticGarage.h"
 
 TimerObject::TimerObject(unsigned long int ms) {
@@ -77,8 +76,8 @@ void TimerObject::Pause() {
 }
 
 void TimerObject::Update() {
-//	if (Tick())
-//		onRun->;
+	if (Tick())
+		onRun->onTimeExpiriedCallback();
 }
 
 unsigned long int TimerObject::getInterval() {

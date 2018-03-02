@@ -60,15 +60,15 @@ Actual staus of work:
 		-- create brench on GitHub
 		-- try to inglobe the TimerObject class inside the AutomaticGarage clss without success
 
-DAY 
+DAY 4.2
 
 Actual staus of work:
 
 	- hardware:
-		-- 
+		-- no progress --> see above
 
 	- software:
-		-- 
+		-- callback fixed (thank you Igor)
 
 DAY 
 

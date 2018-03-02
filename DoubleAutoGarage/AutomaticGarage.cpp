@@ -55,12 +55,12 @@ void AutomaticGarage::testSequence(const int pDelayTime)
 /* PUBLIC SECTION */
 
 AutomaticGarage::AutomaticGarage(const int pPinUp, const int pPinDown, const int pPinSensorUp, 
-	const int pPinSensorDown, const unsigned long pCodeUp, const unsigned long pCodeDown, 
-	const unsigned long int pDuration)
+	const int pPinSensorDown, const int pCodeUp, const int pCodeDown, const unsigned long int 
+	pDuration)
 	
 {
-	this->setAutomaticGarage(pPinUp, pPinDown, pPinSensorUp, pPinSensorDown, pCodeUp, pCodeDown,
-		pDuration);
+	this->setAutomaticGarage(pPinUp, pPinDown, pPinSensorUp, pPinSensorDown, 
+		pCodeUp, pCodeDown, pDuration);
 }
 
 AutomaticGarage::~AutomaticGarage()
@@ -87,12 +87,12 @@ void AutomaticGarage::setPinSensorDown(const int pPinSensorDown)
 	this->_pinSensorDown = pPinSensorDown;
 }
 
-void AutomaticGarage::setGarageUpCode(const unsigned long pCodeUp)
+void AutomaticGarage::setGarageUpCode(const int pCodeUp)
 {
 	this->_garageUpCode = pCodeUp;
 }
 
-void AutomaticGarage::setGarageDownCode(const unsigned long pCodeDown)
+void AutomaticGarage::setGarageDownCode(const int pCodeDown)
 {
 	this->_garageDownCode = pCodeDown;
 }
@@ -103,8 +103,8 @@ void AutomaticGarage::setStatus(const Status_garage status)
 }
 
 void AutomaticGarage::setAutomaticGarage(const int pPinUp, const int pPinDown, 
-	const int pPinSensorUp, const int pPinSensorDown, const unsigned long pCodeUp, 
-	const unsigned long pCodeDown, const unsigned long int pDuration)
+	const int pPinSensorUp, const int pPinSensorDown, const int pCodeUp, const int 
+	pCodeDown, const unsigned long int pDuration)
 {
 	this->setPinUp(pPinUp);
 	this->setPinDow(pPinDown);
@@ -133,8 +133,6 @@ void AutomaticGarage::init()
 
 	/////////////////////////////////////////////////////////////////////
 
-
-	this->_timerObjectPtr->Start();  // TODO Is Right here? I don't think
 }
 
 void AutomaticGarage::initRele()
@@ -157,6 +155,45 @@ void AutomaticGarage::sendValue(unsigned long pCode, unsigned long pDirectionSen
 	this->_timerObjectPtr->Update();
 	Serial.print("Current timer -> ");
 	Serial.println(this->_timerObjectPtr->getCurrentTime());
+
+	// Check signal
+	if (pCode == this->_garageUpCode)
+	{
+		// TODO Implement the algoritm
+		if (this->_status == Status_garage::INITIAL)
+		{
+			this->_status = Status_garage::UP;
+			this->_timerObjectPtr->Start();
+			this->up();
+		}
+		else if (this->_status == Status_garage::UP)
+		{
+			this->stop();
+			this->_timerObjectPtr->Pause();
+			this->_status = Status_garage::PAUSE;
+		}
+		else if (this->_status == Status_garage::PAUSE)
+		{
+			this->up();
+			this->_timerObjectPtr->Resume();
+			this->_status = Status_garage::UP;
+		}
+		else if (this->_status == Status_garage::FINISH)
+		{
+			this->up();
+			delay(1000);
+			this->stop();
+			this->_status = Status_garage::OVER_UP;
+		}
+		else if (this->_status == Status_garage::OVER_UP)
+		{
+			this->down();
+			delay(1000);
+			this->setStatus(Status_garage::DOWN);
+			this->_timerObjectPtr->Start();
+		}
+	}
+
 }
 
 void AutomaticGarage::sendValue(unsigned long pCode)
@@ -170,7 +207,17 @@ void AutomaticGarage::onTimeExpiriedCallback()
 {
 	ArduinoUtility::getInstance()->println("onTimeExpiriedCallback -> START");
 
-	this->testSequence(1000);
+	// TODO Implement it correctly
+	if (this->_status == Status_garage::UP)
+	{
+		this->stop();
+		this->_status = Status_garage::FINISH;
+	}
+	else if (this->_status == Status_garage::DOWN)
+	{
+		this->stop();
+		this->_status = Status_garage::INITIAL;
+	}
 
 	ArduinoUtility::getInstance()->println("onTimeExpiriedCallback -> END");
 }
