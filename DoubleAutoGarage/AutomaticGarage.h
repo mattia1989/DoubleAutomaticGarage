@@ -1,4 +1,3 @@
-#pragma once
 
 #ifndef __AUTOMATICGARAGE_H__
 #define __AUTOMATICGARAGE_H__
@@ -23,8 +22,8 @@ private:
 	const bool IS_SINGLE_SHOT = true;
 
 	// Command codes
-	unsigned long _garageUpCode;
-	unsigned long _garageDownCode;
+	int _garageUpCode;
+	int _garageDownCode;
 
 	Status_garage _status;
 
@@ -42,10 +41,9 @@ private:
 	void stop();
 
 public:
-	AutomaticGarage(const int pPinUp, const int pPinDown, 
-		const int pPinSensorUp, const int pPinSensorDown, 
-		const int pCodeUp, const int pCodeDown, 
-		const unsigned long int pDuration);
+	AutomaticGarage(const int pPinUp, const int pPinDown, const int pPinSensorUp, 
+		const int pPinSensorDown, const int pCodeUp, const int pCodeDown, const 
+		unsigned long int pDuration);
 	~AutomaticGarage();
 
 	void setPinUp(const int pPinUp);
@@ -56,14 +54,25 @@ public:
 	void setGarageDownCode(const int pCodeDown);
 	void setStatus(const Status_garage);
 
-	void setAutomaticGarage(const int pPinUp, const int pPinDown, 
-		const int pPinSensorUp, const int pPinSensorDown, 
-		const int pCodeUp, const int pCodeDown,
-		const unsigned long int pDuration);
+	void setAutomaticGarage(const int pPinUp, const int pPinDown, const int 
+		pPinSensorUp, const int pPinSensorDown, const int pCodeUp, const int 
+		pCodeDown, const unsigned long int pDuration);
+
+	const int getPinUp();
+	const int getPinDow();
+	const int getPinSensorUp();
+	const int getPinSensorDown();
+	const int getGarageUpCode();
+	const int getGarageDownCode();
+	const Status_garage getStatus();
+
+	const AutomaticGarage * getAutomaticGarage();
 	
 	void init();
 	void initRele();
 	void initSensor();
+	void initTimer();
+
 	void testSequence(const int pDelayTime);
 
 	void sendValue(unsigned long pCode, unsigned long pDirectionSensor);

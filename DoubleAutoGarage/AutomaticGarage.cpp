@@ -124,14 +124,7 @@ void AutomaticGarage::init()
 	this->initSensor();
 
 	// Complete initialization of timer
-	this->_timerObjectPtr->setSingleShot(AutomaticGarage::IS_SINGLE_SHOT);
-
-
-	/////////////////////////////////////////////////////////////////////
-
-	this->_timerObjectPtr->setOnTimer(this);
-
-	/////////////////////////////////////////////////////////////////////
+	this->initTimer();
 
 }
 
@@ -144,9 +137,55 @@ void AutomaticGarage::initRele()
 
 void AutomaticGarage::initSensor()
 {
-	// Initialize all sensors' pins
+	// Initialize all sensors'pins
 	pinMode(this->_pinSensorUp, INPUT);
 	pinMode(this->_pinSensorDown, INPUT);
+}
+
+void AutomaticGarage::initTimer()
+{
+	this->_timerObjectPtr->setSingleShot(AutomaticGarage::IS_SINGLE_SHOT);
+	this->_timerObjectPtr->setOnTimer(this);
+}
+
+const int AutomaticGarage::getPinUp()
+{
+	return this->_pinUp;
+}
+
+const int AutomaticGarage::getPinDow()
+{
+	return this->_pinDown;
+}
+
+const int AutomaticGarage::getPinSensorUp()
+{
+	return this->_pinSensorUp;
+}
+
+const int AutomaticGarage::getPinSensorDown()
+{
+	return this->_pinSensorDown;
+}
+
+const int AutomaticGarage::getGarageUpCode()
+{
+	return this->_garageUpCode;
+}
+
+const int AutomaticGarage::getGarageDownCode()
+{
+	return this->_garageDownCode;
+}
+
+const Status_garage AutomaticGarage::getStatus()
+{
+	return this->_status;
+}
+
+const AutomaticGarage * AutomaticGarage::getAutomaticGarage()
+{
+	return this;
 }
 
 void AutomaticGarage::sendValue(unsigned long pCode, unsigned long pDirectionSensor)
