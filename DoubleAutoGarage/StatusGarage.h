@@ -8,11 +8,14 @@ enum Status_garage
 	INITIAL = 0,
 	UP = 1,
 	DOWN = -1,
-	PAUSE = 2,
-	MANUAL = -2,
-	FINISH = 3,
-	OVER_UP = -3,
-	OVER_DOWN = 4
+	MANUAL_UP = 2,
+	MANUAL_DOWN = -2,
+	PAUSE = 3,
+	FINISH = 4,
+	MANUAL_OVER_UP = 5,
+	MANUAL_OVER_DOWN = -5,
+	OVER_UP = 6,
+	OVER_DOWN = -6
 };
 	
 #endif

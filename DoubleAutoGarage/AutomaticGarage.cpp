@@ -22,13 +22,33 @@ void AutomaticGarage::stop()
 	digitalWrite(this->_pinDown, LOW);  // Close Rele down
 }
 
+void AutomaticGarage::autoOverUp()
+{
+	this->up();
+	delay(_MANUAL_DELAY_);
+	this->stop();
+}
+
+void AutomaticGarage::autoOverDown()
+{
+	this->down();
+	delay(_MANUAL_DELAY_);
+	this->stop();
+}
+
+void AutomaticGarage::updateTimer()
+{
+	this->getStandardTimerPtr()->Update();
+	this->getOverTimerPtr()->Update();
+}
+
 void AutomaticGarage::testSequence(const int pDelayTime)
 {
 	ArduinoUtility::getInstance()->println("testSequence(const int pDelayTime) -> START");
 
-	this->_timerObjectPtr->Pause();
+	this->_standardTimerPtr->Pause();
 	Serial.print("Current timer -> ");
-	Serial.println(this->_timerObjectPtr->getCurrentTime());
+	Serial.println(this->_standardTimerPtr->getCurrentTime());
 
 	this->up();
 	delay(pDelayTime);
@@ -37,84 +57,45 @@ void AutomaticGarage::testSequence(const int pDelayTime)
 	this->stop();
 
 	Serial.print("Is single shot -> ");
-	Serial.println(this->_timerObjectPtr->isSingleShot());
+	Serial.println(this->_standardTimerPtr->isSingleShot());
 	Serial.print("Is enable -> ");
-	Serial.println(this->_timerObjectPtr->isEnabled());
+	Serial.println(this->_standardTimerPtr->isEnabled());
 	Serial.print("Get interval -> ");
-	Serial.println(this->_timerObjectPtr->getInterval());
+	Serial.println(this->_standardTimerPtr->getInterval());
 	Serial.print("Current timer -> ");
-	Serial.println(this->_timerObjectPtr->getCurrentTime());
+	Serial.println(this->_standardTimerPtr->getCurrentTime());
 
-	this->_timerObjectPtr->Resume();
+	this->_standardTimerPtr->Resume();
 	Serial.print("Current timer -> ");
-	Serial.println(this->_timerObjectPtr->getCurrentTime());
+	Serial.println(this->_standardTimerPtr->getCurrentTime());
 	
 	ArduinoUtility::getInstance()->println("testSequence(const int pDelayTime) -> END");
 }
 
 /* PUBLIC SECTION */
 
-AutomaticGarage::AutomaticGarage(const int pPinUp, const int pPinDown, const int pPinSensorUp, 
-	const int pPinSensorDown, const int pCodeUp, const int pCodeDown, const unsigned long int 
-	pDuration)
-	
+AutomaticGarage::AutomaticGarage(const int pPinUp, const int pPinDown, const int pPinSensorUp, const int pPinSensorDown, const int pCodeUp, const int pCodeDown)
 {
-	this->setAutomaticGarage(pPinUp, pPinDown, pPinSensorUp, pPinSensorDown, 
-		pCodeUp, pCodeDown, pDuration);
+	AutomaticGarage(pPinUp, pPinDown, pPinSensorUp, pPinSensorDown, pCodeUp,
+		pCodeDown, _DEFAULT_DURATION_);
+}
+
+AutomaticGarage::AutomaticGarage(const int pPinUp, const int pPinDown, const int pPinSensorUp,
+	const int pPinSensorDown, const int pCodeUp, const int pCodeDown, const unsigned long int 
+	pDuration):_pinUp(pPinUp), _pinDown(pPinDown), _pinSensorUp(pPinSensorUp), 
+	_pinSensorDown(pPinSensorDown), _garageUpCode(pCodeUp), _garageDownCode(pCodeDown)
+{
+	this->_standardTimerPtr = new TimerObject(pDuration);
+	this->_overTimerPtr = new TimerObject(_DEFAULT_OVER_DURATION_);
 }
 
 AutomaticGarage::~AutomaticGarage()
 {
 }
 
-void AutomaticGarage::setPinUp(const int pPinUp)
-{
-	this->_pinUp = pPinUp;
-}
-
-void AutomaticGarage::setPinDow(const int pPinDown)
-{
-	this->_pinDown = pPinDown;
-}
-
-void AutomaticGarage::setPinSensorUp(const int pPinSensorUp)
-{
-	this->_pinSensorUp = pPinSensorUp;
-}
-
-void AutomaticGarage::setPinSensorDown(const int pPinSensorDown)
-{
-	this->_pinSensorDown = pPinSensorDown;
-}
-
-void AutomaticGarage::setGarageUpCode(const int pCodeUp)
-{
-	this->_garageUpCode = pCodeUp;
-}
-
-void AutomaticGarage::setGarageDownCode(const int pCodeDown)
-{
-	this->_garageDownCode = pCodeDown;
-}
-
 void AutomaticGarage::setStatus(const Status_garage status)
 {
 	this->_status = status;
-}
-
-void AutomaticGarage::setAutomaticGarage(const int pPinUp, const int pPinDown, 
-	const int pPinSensorUp, const int pPinSensorDown, const int pCodeUp, const int 
-	pCodeDown, const unsigned long int pDuration)
-{
-	this->setPinUp(pPinUp);
-	this->setPinDow(pPinDown);
-	this->setPinSensorUp(pPinSensorUp);
-	this->setPinSensorDown(pPinSensorDown);
-	this->setGarageUpCode(pCodeUp);
-	this->setGarageDownCode(pCodeDown);
-	this->setStatus(INITIAL);
-
-	this->_timerObjectPtr = new TimerObject(pDuration);
 }
 
 void AutomaticGarage::init()
@@ -123,7 +104,8 @@ void AutomaticGarage::init()
 	this->initRele();
 	this->initSensor();
 
-	// Complete initialization of timer
+	// Init tracer
+	this->initStatus();
 	this->initTimer();
 
 }
@@ -142,10 +124,17 @@ void AutomaticGarage::initSensor()
 	pinMode(this->_pinSensorDown, INPUT);
 }
 
+void AutomaticGarage::initStatus()
+{
+	this->setStatus(Status_garage::INITIAL);
+}
+
 void AutomaticGarage::initTimer()
 {
-	this->_timerObjectPtr->setSingleShot(AutomaticGarage::IS_SINGLE_SHOT);
-	this->_timerObjectPtr->setOnTimer(this);
+	this->getStandardTimerPtr()->setSingleShot(AutomaticGarage::IS_SINGLE_SHOT);
+	this->getStandardTimerPtr()->setOnTimer(this);
+
+	//this->_timerOverTimerPtr->
 }
 
 const int AutomaticGarage::getPinUp()
@@ -183,6 +172,25 @@ const Status_garage AutomaticGarage::getStatus()
 	return this->_status;
 }
 
+TimerObject * AutomaticGarage::getStandardTimerPtr()
+{
+	return this->_standardTimerPtr;
+}
+
+TimerObject * AutomaticGarage::getOverTimerPtr()
+{
+	return this->_overTimerPtr;
+}
+
+bool AutomaticGarage::checkStatus(Status_garage pStatus)
+{
+	bool _return = false;
+
+	if (this->getStatus() == pStatus) { _return = true; }
+
+	return _return;
+}
+
 const AutomaticGarage * AutomaticGarage::getAutomaticGarage()
 {
 	return this;
@@ -191,48 +199,144 @@ const AutomaticGarage * AutomaticGarage::getAutomaticGarage()
 void AutomaticGarage::sendValue(unsigned long pCode, unsigned long pDirectionSensor)
 {
 	// Update timer
-	this->_timerObjectPtr->Update();
-	Serial.print("Current timer -> ");
-	Serial.println(this->_timerObjectPtr->getCurrentTime());
+	this->updateTimer();
+	Serial.print("Current Standrd timer -> ");
+	Serial.println(this->getStandardTimerPtr()->getCurrentTime());
+	Serial.print("Current Over timer -> ");
+	Serial.println(this->getOverTimerPtr()->getCurrentTime());
 
-	// Check signal
-	if (pCode == this->_garageUpCode)
+	// Check
+	if (this->checkStatus(Status_garage::INITIAL))
 	{
-		// TODO Implement the algoritm
-		if (this->_status == Status_garage::INITIAL)
+		if (pDirectionSensor == AutomaticGarage::SENSOR_DIRECTION_NONE)
 		{
-			this->_status = Status_garage::UP;
-			this->_timerObjectPtr->Start();
-			this->up();
+			if (pCode == this->getGarageUpCode())
+			{
+				// Start up
+				this->up();
+				this->getStandardTimerPtr()->Start();
+				this->setStatus(Status_garage::UP);
+			}
+			else if (pCode == this->getGarageDownCode())
+			{
+				
+			}
+			else
+			{
+				// No code && No signal && initial -> nothing
+			}
 		}
-		else if (this->_status == Status_garage::UP)
+		else if (pDirectionSensor == AutomaticGarage::SENSOR_DIRECTION_UP)
 		{
-			this->stop();
-			this->_timerObjectPtr->Pause();
-			this->_status = Status_garage::PAUSE;
+			// Trace up
+			this->getStandardTimerPtr()->Start();
+			this->setStatus(Status_garage::MANUAL_UP);
 		}
-		else if (this->_status == Status_garage::PAUSE)
+		else if (pDirectionSensor == AutomaticGarage::SENSOR_DIRECTION_DOWN)
 		{
-			this->up();
-			this->_timerObjectPtr->Resume();
-			this->_status = Status_garage::UP;
-		}
-		else if (this->_status == Status_garage::FINISH)
-		{
-			this->up();
-			delay(1000);
-			this->stop();
-			this->_status = Status_garage::OVER_UP;
-		}
-		else if (this->_status == Status_garage::OVER_UP)
-		{
-			this->down();
-			delay(1000);
-			this->setStatus(Status_garage::DOWN);
-			this->_timerObjectPtr->Start();
 		}
 	}
+	else if (this->checkStatus(Status_garage::UP))
+	{
+		/* The following status is inconcistency because if the status is up, the */
+		/*                       direction sensor can not be none                 */
 
+		if (pDirectionSensor == AutomaticGarage::SENSOR_DIRECTION_NONE)
+		{
+			if (pCode == this->getGarageUpCode())
+			{
+				// Inconcistent -> raise exception
+			}
+			else if (pCode == this->getGarageDownCode())
+			{
+				// Inconcistent -> raise exception
+			}
+			else
+			{
+				// Inconcistent -> raise exception
+			}
+		}
+		else if (pDirectionSensor == AutomaticGarage::SENSOR_DIRECTION_UP)
+		{
+			if ((pCode == this->getGarageUpCode()) || (pCode == this->getGarageDownCode()))
+			{
+				// Set in pause
+				this->stop();
+				this->getStandardTimerPtr()->Pause();
+				this->setStatus(Status_garage::PAUSE);
+			}
+			else
+			{
+				// Do nothing
+			}
+		}
+		else if (pDirectionSensor == AutomaticGarage::SENSOR_DIRECTION_DOWN)
+		{
+			if (pCode == this->getGarageUpCode())
+			{
+				
+			}
+			else if (pCode == this->getGarageDownCode())
+			{
+				
+			}
+			else
+			{
+
+			}
+
+		}
+	}
+	else if (this->checkStatus(Status_garage::MANUAL_UP))
+	{
+		if (pDirectionSensor == AutomaticGarage::SENSOR_DIRECTION_NONE)
+		{
+			if (pCode == this->getGarageUpCode())
+			{
+
+			}
+			else if (pCode == this->getGarageDownCode())
+			{
+
+			}
+			else
+			{
+
+			}
+		}
+		else if (pDirectionSensor == AutomaticGarage::SENSOR_DIRECTION_UP)
+		{
+			if (pCode == this->getGarageUpCode())
+			{
+
+			}
+			else if (pCode == this->getGarageDownCode())
+			{
+
+			}
+			else
+			{
+
+			}
+		}
+		else if (pDirectionSensor == AutomaticGarage::SENSOR_DIRECTION_DOWN)
+		{
+			if (pCode == this->getGarageUpCode())
+			{
+
+			}
+			else if (pCode == this->getGarageDownCode())
+			{
+
+			}
+			else
+			{
+
+			}
+
+		}
+	}
+	// ELSE IF --> TODO Implement the next state
 }
 
 void AutomaticGarage::sendValue(unsigned long pCode)
@@ -240,23 +344,26 @@ void AutomaticGarage::sendValue(unsigned long pCode)
 	this->sendValue(pCode, this->SENSOR_DIRECTION_NONE);
 }
 
-/* CALLBACK & LISTENER SECTION */
+/* CALLBACK SECTION */
 
 void AutomaticGarage::onTimeExpiriedCallback()
 {
 	ArduinoUtility::getInstance()->println("onTimeExpiriedCallback -> START");
 
-	// TODO Implement it correctly
-	if (this->_status == Status_garage::UP)
+	// Implement it correctly
+	this->getStandardTimerPtr()->Stop();
+
+	if (this->checkStatus(Status_garage::UP) || this->checkStatus(Status_garage::MANUAL_UP))
 	{
-		this->stop();
 		this->_status = Status_garage::FINISH;
 	}
-	else if (this->_status == Status_garage::DOWN)
+	else if (this->checkStatus(Status_garage::DOWN) || this->checkStatus(Status_garage::MANUAL_DOWN))
 	{
-		this->stop();
+		delay(_MANUAL_DELAY_);
 		this->_status = Status_garage::INITIAL;
 	}
+
+	this->stop();
 
 	ArduinoUtility::getInstance()->println("onTimeExpiriedCallback -> END");
 }

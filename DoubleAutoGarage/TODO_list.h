@@ -70,6 +70,51 @@ Actual staus of work:
 	- software:
 		-- callback fixed (thank you Igor)
 
+DAY 5.1
+
+Actual staus of work:
+
+	- hardware:
+		-- no progress --> see above
+
+	- software:
+		-- chosen to use callback's pattern on analogic sensors
+		-- created new branch on Github's repository
+
+DAY 5.2
+
+Actual staus of work:
+
+	- hardware:
+		-- no progress --> see above
+
+	- software:
+		-- created some new method
+		-- inserted operator const for all invariated attribute
+		-- modified timer expiried callback
+		-- start to improve the logic
+		-- implement ALL down sensor and button logic
+
+DAY 
+
+Actual staus of work:
+
+	- hardware:
+		-- 
+
+	- software:
+		-- 
+
+DAY 
+
+Actual staus of work:
+
+	- hardware:
+		-- 
+
+	- software:
+		-- 
+
 DAY 
 
 Actual staus of work:
