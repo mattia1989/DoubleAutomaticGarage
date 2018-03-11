@@ -21,6 +21,10 @@ private:
 	unsigned long LastTime;
 	unsigned long DiffTime;//used when I pause the Timer and need to resume
 
+	unsigned long int StartDuration;
+	unsigned long int PreviousToggle = 0;
+	bool isGoUp;
+
 public:
 	TimerObject(unsigned long int ms);
 	TimerObject(unsigned long int ms, AutomaticGarage * callback);
@@ -36,7 +40,10 @@ public:
 	void Pause();
 	void Stop();
 	void Update();
-	
+
+	void Reverse();
+	void Reset();
+
 	unsigned long int getInterval();
 	unsigned long int getCurrentTime();
 	AutomaticGarage * getOnTimerCallback();
@@ -46,5 +53,5 @@ public:
 
 };
 
-
 #endif // TIMER_OBJECT_H
+

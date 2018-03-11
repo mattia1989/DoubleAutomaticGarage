@@ -26,7 +26,7 @@ const int CODE_UP_2 = 123456789; // TODO You must change this!!! FAKE !!!
 const int CODE_DOWN_2 = 123456789; // TODO You must change this!!! FAKE !!!
 
 // Max Height
-const unsigned long int HEIGHT_TIME_1 = 5 * 1000; // TODO Thinging it! 
+const unsigned long int HEIGHT_TIME_1 = 15 * 1000; // TODO Thinging it! 
 const unsigned long int HEIGHT_TIME_2 = 5 * 1000; // TODO Thinging it!
 
 #endif // !__SKETCH_CONSTANTS__

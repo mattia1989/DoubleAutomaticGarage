@@ -341,7 +341,50 @@ void AutomaticGarage::sendValue(unsigned long pCode, unsigned long pDirectionSen
 
 void AutomaticGarage::sendValue(unsigned long pCode)
 {
-	this->sendValue(pCode, this->SENSOR_DIRECTION_NONE);
+	//this->sendValue(pCode, this->SENSOR_DIRECTION_NONE);
+
+	this->updateTimer();
+	Serial.print("Current Standrd timer -> ");
+	Serial.println(this->getStandardTimerPtr()->getCurrentTime());
+
+	if (pCode == this->getGarageUpCode())
+	{
+		if (this->checkStatus(INITIAL))
+		{
+			this->up();
+			this->setStatus(UP);
+			this->getStandardTimerPtr()->Start();
+		}
+		else if (this->checkStatus(UP))
+		{
+			this->stop();
+			this->setStatus(PAUSE);
+			this->getStandardTimerPtr()->Pause();
+		}
+		else if (this->checkStatus(PAUSE))
+		{
+			this->setStatus(DOWN);
+			this->getStandardTimerPtr()->Reverse();
+			this->down();
+			Serial.print("Current duration: ");
+			Serial.println(this->getStandardTimerPtr()->getInterval());
+		}
+		else if (this->checkStatus(DOWN))
+		{
+			this->up();
+			this->setStatus(UP);
+			this->getStandardTimerPtr()->Reverse();
+			Serial.print("Current duration: ");
+			Serial.println(this->getStandardTimerPtr()->getInterval());
+		}
+		else if (this->checkStatus(FINISH))
+		{
+			this->down();
+			this->setStatus(MANUAL_DOWN);
+			this->getStandardTimerPtr()->Start();
+		}
+	}
+
 }
 
 /* CALLBACK SECTION */
@@ -360,6 +403,7 @@ void AutomaticGarage::onTimeExpiriedCallback()
 	else if (this->checkStatus(Status_garage::DOWN) || this->checkStatus(Status_garage::MANUAL_DOWN))
 	{
 		delay(_MANUAL_DELAY_);
+		this->getStandardTimerPtr()->Reset();
 		this->_status = Status_garage::INITIAL;
 	}
 

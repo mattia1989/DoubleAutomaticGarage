@@ -55,7 +55,7 @@ void loop() {
 	gDirection = 0;
 
 	// TODO Read from sensor and set value
-	gGarageOnePtr->sendValue(gCode, gDirection);
+	gGarageOnePtr->sendValue(gCode);
 
 	// Get sensor's value of second garage TODO
 	gDirection = 0;
