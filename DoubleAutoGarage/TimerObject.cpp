@@ -20,10 +20,6 @@ void TimerObject::Create(unsigned long int ms, AutomaticGarage * callback, bool 
 	setSingleShot(isSingle);
 	setOnTimer(callback);
 	LastTime = 0;
-
-	StartDuration = ms;
-	PreviousToggle = 0;
-	isGoUp = true;
 }
 
 bool TimerObject::Tick() {
@@ -32,7 +28,6 @@ bool TimerObject::Tick() {
 	if (LastTime > millis() * 2)//millis restarted
 		LastTime = 0;
 	if ((unsigned long int)(millis() - LastTime) >= msInterval) {
-		Reset();
 		if (isSingleShot())
 			setEnabled(false);
 		return true;
@@ -83,33 +78,6 @@ void TimerObject::Update() {
 	if (Tick())
 		onRun->onTimeExpiriedCallback();
 
-}
-
-void TimerObject::Reverse() {
-
-	// Calculate elapsed time
-	if (DiffTime == 0) DiffTime = millis() - LastTime;
-	unsigned long int tmpElapsedTime = millis() - DiffTime;
-
-	// Check
-	if (isGoUp) {
-		PreviousToggle;
-		setInterval(PreviousToggle);
-	} else {
-		PreviousToggle;
-		setInterval(StartDuration - PreviousToggle);
-	}
-
-	// Restart
-	isGoUp = !isGoUp;
-	Start();
-
-}
-
-void TimerObject::Reset() {
-	LastTime = millis();
-	setInterval(StartDuration);
-	isGoUp = true;
 }
 
 unsigned long int TimerObject::getInterval() {
